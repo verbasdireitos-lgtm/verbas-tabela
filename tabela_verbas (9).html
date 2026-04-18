@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tabela de Verbas Rescisórias — Verbas & Direitos na Prática</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1A3A5C;
+    --navy-dark: #0F2540;
+    --navy-light: #2A4F7A;
+    --gold: #C9A84C;
+    --gold-light: #E8C870;
+    --gold-pale: #F5E9C8;
+    --white: #FFFFFF;
+    --off-white: #F8F6F0;
+    --text-muted: #8A9BB5;
+    --green: #2D7A4F;
+    --green-bg: #EBF6F0;
+    --red: #9B2D2D;
+    --red-bg: #F6EBEB;
+    --amber: #8A6020;
+    --amber-bg: #FBF3E0;
+    --gray-bg: #F0EEE8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    background: var(--navy-dark);
+    min-height: 100vh;
+    color: var(--white);
+  }
+
+  .page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 0 60px;
+  }
+
+  /* HEADER */
+  .header {
+    padding: 48px 40px 36px;
+    border-bottom: 1px solid rgba(201,168,76,0.25);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 280px; height: 280px;
+    border-radius: 50%;
+    border: 1px solid rgba(201,168,76,0.1);
+  }
+
+  .header::after {
+    content: '';
+    position: absolute;
+    top: -20px; right: -20px;
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    border: 1px solid rgba(201,168,76,0.08);
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .brand-mark {
+    width: 36px; height: 36px;
+    border: 1.5px solid var(--gold);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    color: var(--gold);
+    letter-spacing: 0.02em;
+  }
+
+  .brand-name {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    opacity: 0.9;
+  }
+
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 38px;
+    font-weight: 700;
+    line-height: 1.15;
+    color: var(--white);
+    margin-bottom: 10px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .header h1 span {
+    color: var(--gold);
+  }
+
+  .header-sub {
+    font-size: 15px;
+    color: var(--text-muted);
+    font-weight: 300;
+    letter-spacing: 0.02em;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* LEGENDA */
+  .legend {
+    padding: 20px 40px;
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .legend-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .dot-sim { background: var(--green); }
+  .dot-nao { background: var(--red); }
+  .dot-parcial { background: #C9A84C; }
+  .dot-depende { background: #5A7FA8; }
+
+  /* FILTROS */
+  .filters {
+    padding: 24px 40px 0;
+  }
+
+  .filters-label {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+
+  .filter-tabs {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .filter-tab {
+    padding: 7px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: transparent;
+    color: var(--text-muted);
+    transition: all 0.2s;
+    font-family: 'Source Sans 3', sans-serif;
+  }
+
+  .filter-tab:hover {
+    border-color: rgba(201,168,76,0.4);
+    color: var(--gold-light);
+  }
+
+  .filter-tab.active {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--navy-dark);
+    font-weight: 600;
+  }
+
+  /* TABELA */
+  .table-wrap {
+    padding: 28px 40px;
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  thead tr {
+    border-bottom: 1px solid rgba(201,168,76,0.3);
+  }
+
+  th {
+    padding: 10px 14px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  th:first-child { min-width: 180px; }
+  th:not(:first-child) { min-width: 110px; text-align: center; }
+
+  .verba-row {
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .verba-row:hover {
+    background: rgba(255,255,255,0.04);
+  }
+
+  .verba-row.hidden-row {
+    display: none;
+  }
+
+  td {
+    padding: 13px 14px;
+    font-size: 14px;
+    vertical-align: middle;
+  }
+
+  td:first-child {
+    font-weight: 500;
+    color: var(--white);
+    font-size: 14px;
+  }
+
+  td .verba-sub {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 300;
+    margin-top: 2px;
+  }
+
+  td:not(:first-child) {
+    text-align: center;
+  }
+
+  /* PILLS */
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 4px 11px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+    min-width: 72px;
+  }
+
+  .pill-sim { background: var(--green-bg); color: var(--green); }
+  .pill-nao { background: var(--red-bg); color: var(--red); }
+  .pill-parcial { background: var(--amber-bg); color: var(--amber); }
+  .pill-depende { background: rgba(90,127,168,0.15); color: #7AABDB; }
+
+  /* DETALHE EXPANSÍVEL */
+  .detail-row {
+    display: none;
+    background: rgba(255,255,255,0.025);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .detail-row.open {
+    display: table-row;
+  }
+
+  .detail-cell {
+    padding: 16px 14px 16px 24px;
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+
+  .detail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin-top: 10px;
+  }
+
+  .detail-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 8px;
+    padding: 12px 14px;
+  }
+
+  .detail-card-label {
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+
+  .detail-card-text {
+    font-size: 13px;
+    color: rgba(255,255,255,0.75);
+    line-height: 1.6;
+  }
+
+  /* TIPOS — cabeçalhos de coluna com badge */
+  .col-head {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .col-type {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  .col-sub {
+    font-size: 10px;
+    color: var(--text-muted);
+    font-weight: 300;
+    letter-spacing: 0.03em;
+    text-transform: none;
+  }
+
+  /* NOTA */
+  .nota {
+    margin: 0 40px;
+    padding: 16px 20px;
+    background: rgba(201,168,76,0.08);
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 10px;
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+
+  .nota strong { color: var(--gold); }
+
+  /* CTA */
+  .cta {
+    margin: 32px 40px 0;
+    padding: 28px 32px;
+    background: linear-gradient(135deg, rgba(26,58,92,0.9), rgba(15,37,64,0.95));
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .cta-text h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 6px;
+  }
+
+  .cta-text p {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    max-width: 400px;
+  }
+
+  .cta-btn {
+    display: inline-block;
+    padding: 12px 28px;
+    background: var(--gold);
+    color: var(--navy-dark);
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border-radius: 6px;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 0.2s;
+    cursor: pointer;
+    border: none;
+  }
+
+  .cta-btn:hover { background: var(--gold-light); }
+
+  .footer-brand {
+    text-align: center;
+    padding: 32px 40px 0;
+    font-size: 12px;
+    color: rgba(255,255,255,0.2);
+    letter-spacing: 0.08em;
+  }
+
+  @media (max-width: 640px) {
+    .header { padding: 32px 20px 24px; }
+    .header h1 { font-size: 26px; }
+    .legend { padding: 16px 20px; gap: 14px; }
+    .filters { padding: 20px 20px 0; }
+    .table-wrap { padding: 20px 20px; }
+    th, td { padding: 10px 8px; }
+    .pill { min-width: 58px; font-size: 11px; padding: 3px 8px; }
+    .nota, .cta { margin: 0 20px; }
+    .cta { padding: 20px; }
+    .footer-brand { padding: 24px 20px 0; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header">
+    <div class="brand">
+      <svg width="48" height="48" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="0" width="500" height="500" rx="40" fill="#1C2E4A"/><g transform="translate(155, 60) scale(2.3)"><circle cx="40" cy="40" r="38" fill="none" stroke="#C09000" stroke-width="1.5" opacity="0.5"/><circle cx="40" cy="40" r="32" fill="#C09000" opacity="0.10"/><rect x="14" y="62" width="52" height="4" rx="1" fill="#C09000" opacity="0.9"/><rect x="14" y="18" width="52" height="4" rx="1" fill="#C09000" opacity="0.9"/><rect x="14" y="22" width="52" height="2" rx="0.5" fill="#C09000" opacity="0.5"/><rect x="18" y="24" width="9" height="38" rx="2" fill="#C09000" opacity="0.85"/><rect x="32" y="24" width="9" height="38" rx="2" fill="#C09000" opacity="0.85"/><rect x="53" y="24" width="9" height="38" rx="2" fill="#C09000" opacity="0.85"/></g><line x1="60" y1="368" x2="440" y2="368" stroke="#C09000" stroke-width="1.5" opacity="0.5"/><text x="250" y="408" font-family="Georgia, serif" font-size="38" font-weight="700" fill="#F5F0C8" text-anchor="middle" letter-spacing="1">VERBAS &amp; DIREITOS</text><text x="250" y="448" font-family="Georgia, serif" font-size="24" font-weight="400" fill="#8BAED4" text-anchor="middle" letter-spacing="6">NA PRÁTICA</text></svg>
+      <div class="brand-name">Verbas &amp; Direitos na Prática</div>
+    </div>
+    <h1>Verbas Rescisórias<br>por Tipo de <span>Rescisão</span></h1>
+    <p class="header-sub">Clique em qualquer verba para ver detalhes e fundamento legal</p>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot dot-sim"></div> Devido integralmente</div>
+    <div class="legend-item"><div class="legend-dot dot-nao"></div> Não é devido</div>
+    <div class="legend-item"><div class="legend-dot dot-parcial"></div> Devido parcialmente</div>
+    <div class="legend-item"><div class="legend-dot dot-depende"></div> Depende do caso</div>
+  </div>
+
+  <div class="filters">
+    <div class="filters-label">Filtrar por tipo de rescisão</div>
+    <div class="filter-tabs">
+      <button class="filter-tab active" data-filter="all">Todos</button>
+      <button class="filter-tab" data-filter="sgc">Sem justa causa</button>
+      <button class="filter-tab" data-filter="cjc">Com justa causa</button>
+      <button class="filter-tab" data-filter="pd">Pedido de demissão</button>
+      <button class="filter-tab" data-filter="am">Acordo mútuo</button>
+      <button class="filter-tab" data-filter="ri">Rescisão indireta</button>
+      <button class="filter-tab" data-filter="cr">Culpa recíproca</button>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table id="main-table">
+      <thead>
+        <tr>
+          <th>Verba rescisória</th>
+          <th><div class="col-head"><span class="col-type">Sem JC</span><span class="col-sub">art. 477 CLT</span></div></th>
+          <th><div class="col-head"><span class="col-type">Com JC</span><span class="col-sub">art. 482 CLT</span></div></th>
+          <th><div class="col-head"><span class="col-type">Ped. Demissão</span><span class="col-sub">art. 477 CLT</span></div></th>
+          <th><div class="col-head"><span class="col-type">Acordo Mútuo</span><span class="col-sub">art. 484-A CLT</span></div></th>
+          <th><div class="col-head"><span class="col-type">Rescisão Ind.</span><span class="col-sub">art. 483 CLT</span></div></th>
+          <th><div class="col-head"><span class="col-type">Culpa Recíproca</span><span class="col-sub">art. 484 CLT</span></div></th>
+        </tr>
+      </thead>
+      <tbody id="tbody">
+      </tbody>
+    </table>
+  </div>
+
+  <div class="nota" style="margin-bottom:10px;">
+    <strong>Sobre o aviso prévio trabalhado — por que "depende"?</strong><br><br>
+    <strong>Sem justa causa:</strong> o empregador pode dispensar o cumprimento do aviso — nesse caso ele é indenizado. Se exigir o cumprimento, o empregado trabalha os dias e não recebe o valor em dobro.<br><br>
+    <strong>Pedido de demissão:</strong> o empregado deve cumprir o aviso prévio. Se o empregador dispensar, o aviso não é indenizado. Se o empregado se recusar a cumprir, fica obrigado a indenizar o empregador pelo período (art. 487, §2º CLT).<br><br>
+    <strong>Acordo mútuo:</strong> o aviso prévio é de 50% — e pode ser cumprido ou indenizado, conforme o que as partes acordarem.<br><br>
+    <strong>Rescisão indireta:</strong> o empregado não é obrigado a cumprir aviso — recebe o valor indenizado integralmente, pois a culpa é do empregador.<br><br>
+    <strong>Culpa recíproca:</strong> segue a mesma lógica da rescisão sem justa causa, mas o valor é reduzido à metade (art. 484 CLT).
+  </div>
+
+  <div class="nota">
+    <strong>Atenção:</strong> esta tabela apresenta as regras gerais. Contratos especiais (doméstico, rural, aprendiz, por prazo determinado) podem ter regras distintas. Os cálculos devem sempre considerar a <strong>remuneração total</strong>, incluindo parcelas variáveis habituais — não apenas o salário-base. <strong>OJ 394 TST</strong> (desde 20/03/2023): o DSR majorado pelas horas extras integra a base de cálculo de todas as verbas rescisórias.
+  </div>
+
+  <div class="cta">
+    <div class="cta-text">
+      <h3>Quer calcular culpa recíproca ou acordo mútuo?</h3>
+      <p>Acesse gratuitamente o Simulador de Culpa Recíproca e Acordo Mútuo — veja exatamente o que é devido em cada cenário.</p>
+    </div>
+    <button class="cta-btn" onclick="window.open('https://verbasdireitos-lgtm.github.io/verbas-simulador/simulador_rescisao.html','_blank')">Acessar o Simulador →</button>
+  </div>
+
+  <div class="footer-brand">@verbasedireitos · Série Verbas &amp; Direitos na Prática · © 2026</div>
+</div>
+
+<script>
+const verbas = [
+  {
+    id: 'saldo',
+    nome: 'Saldo de salário',
+    sub: 'Dias trabalhados no mês da rescisão',
+    sgc: 'sim', cjc: 'sim', pd: 'sim', am: 'sim', ri: 'sim', cr: 'sim',
+    detalhe: {
+      base: 'Remuneração ÷ 30 × dias trabalhados no mês',
+      fundamento: 'Art. 477, §1º CLT',
+      obs: 'Sempre devido, independente do motivo da rescisão. Incluir parcelas variáveis habituais na base de cálculo.',
+      cuidado: 'Erro comum: usar apenas salário-base. A remuneração total (com médias de HE, comissões, etc.) é a base correta.'
+    }
+  },
+  {
+    id: 'avisoind',
+    nome: 'Aviso prévio indenizado',
+    sub: 'Quando o empregador dispensa do cumprimento',
+    sgc: 'sim', cjc: 'nao', pd: 'nao', am: 'parcial', ri: 'sim', cr: 'parcial',
+    detalhe: {
+      base: '30 dias + 3 dias por ano de serviço (máx. 90 dias) — Lei 12.506/2011',
+      fundamento: 'Art. 487 CLT + Lei 12.506/2011',
+      obs: 'Acordo mútuo: 50% do aviso prévio (art. 484-A, §1º, I, CLT). Rescisão indireta: direito integral. Culpa recíproca: 50% do aviso prévio — art. 484 CLT.',
+      cuidado: 'O aviso prévio proporcional pode chegar a 90 dias. Cada dia a mais amplia FGTS, 13º e férias.'
+    }
+  },
+  {
+    id: 'avisotra',
+    nome: 'Aviso prévio trabalhado',
+    sub: 'Quando o empregado cumpre o aviso',
+    sgc: 'depende', cjc: 'nao', pd: 'depende', am: 'depende', ri: 'depende', cr: 'depende',
+    detalhe: {
+      base: 'Mesmo cálculo do aviso indenizado — a diferença é a forma de cumprimento',
+      fundamento: 'Art. 487 CLT',
+      obs: 'No pedido de demissão, o empregado deve cumprir o aviso ou indenizar o empregador. Se dispensado do cumprimento pelo empregador, não é indenizado.',
+      cuidado: 'Redução de 2h diárias ou 7 dias corridos para busca de novo emprego (art. 488 CLT).'
+    }
+  },
+  {
+    id: 'dec13',
+    nome: '13º salário proporcional',
+    sub: 'Meses trabalhados no ano da rescisão',
+    sgc: 'sim', cjc: 'nao', pd: 'sim', am: 'sim', ri: 'sim', cr: 'parcial',
+    detalhe: {
+      base: 'Remuneração ÷ 12 × meses trabalhados (fração ≥ 15 dias = 1 mês)',
+      fundamento: 'Lei 4.090/1962 + Súmula 157 TST',
+      obs: 'Com justa causa: não é devido (art. 482 CLT). Nos demais casos, sempre proporcional aos meses do ano em exercício.',
+      cuidado: 'Incluir médias de parcelas variáveis habituais. Empresas frequentemente calculam só sobre salário-base.'
+    }
+  },
+  {
+    id: 'feriasprop',
+    nome: 'Férias proporcionais + 1/3',
+    sub: 'Período aquisitivo em curso',
+    sgc: 'sim', cjc: 'nao', pd: 'sim', am: 'sim', ri: 'sim', cr: 'parcial',
+    detalhe: {
+      base: 'Remuneração × (meses do período aquisitivo ÷ 12) × 1,3333',
+      fundamento: 'Art. 147 CLT + Súmula 261 TST',
+      obs: 'Com justa causa: não é devido para o período aquisitivo em curso. Férias vencidas (período anterior completo) são sempre devidas em qualquer modalidade.',
+      cuidado: 'Férias VENCIDAS são diferentes de férias PROPORCIONAIS. As vencidas são devidas até na justa causa.'
+    }
+  },
+  {
+    id: 'feriasvenc',
+    nome: 'Férias vencidas + 1/3',
+    sub: 'Período aquisitivo já completado',
+    sgc: 'sim', cjc: 'sim', pd: 'sim', am: 'sim', ri: 'sim', cr: 'sim',
+    detalhe: {
+      base: 'Remuneração × 1,3333 (por período vencido não gozado)',
+      fundamento: 'Art. 146 CLT + Súmula 261 TST',
+      obs: 'Sempre devida, em qualquer tipo de rescisão — inclusive justa causa. Cada período aquisitivo completo não gozado gera direito.',
+      cuidado: 'Férias em dobro se o empregador não as concedeu no prazo legal (art. 137 CLT). Verificar se há períodos em aberto.'
+    }
+  },
+  {
+    id: 'fgts',
+    nome: 'FGTS — depósitos + saque',
+    sub: 'Saldo acumulado na conta vinculada',
+    sgc: 'sim', cjc: 'nao', pd: 'nao', am: 'parcial', ri: 'sim', cr: 'sim',
+    detalhe: {
+      base: '8% da remuneração bruta mensal (depósito mensal pelo empregador)',
+      fundamento: 'Lei 8.036/1990 + art. 20 (hipóteses de saque)',
+      obs: 'Acordo mútuo: saque de 80% do saldo (art. 484-A, §1º, II). Pedido de demissão e justa causa: não há saque (salvo exceções legais como compra de imóvel, doença grave).',
+      cuidado: 'Verificar se os depósitos foram feitos sobre a remuneração integral — não só sobre salário-base. Diferenças geram ação de complementação.'
+    }
+  },
+  {
+    id: 'multa',
+    nome: 'Multa de 40% do FGTS',
+    sub: 'Incide sobre o saldo total de depósitos',
+    sgc: 'sim', cjc: 'nao', pd: 'nao', am: 'parcial', ri: 'sim', cr: 'parcial',
+    detalhe: {
+      base: '40% sobre o total de depósitos do FGTS durante o contrato',
+      fundamento: 'Art. 18, §1º, Lei 8.036/1990',
+      obs: 'Acordo mútuo: multa de 20% (art. 484-A, §1º, I). Rescisão indireta: 40% integral. Culpa recíproca: 20% — metade da multa normal (art. 484 CLT).',
+      cuidado: 'A base é o TOTAL de depósitos — incluindo diferenças de períodos em que o FGTS foi calculado com base errada. Verificar extrato completo.'
+    }
+  },
+  {
+    id: 'segurod',
+    nome: 'Seguro-desemprego',
+    sub: 'Benefício do trabalhador formal',
+    sgc: 'sim', cjc: 'nao', pd: 'nao', am: 'parcial', ri: 'sim', cr: 'depende',
+    detalhe: {
+      base: 'Média dos 3 últimos salários — tabela MTE 2026 (teto: R$ 2.518,65)',
+      fundamento: 'Lei 7.998/1990 + Resolução CODEFAT',
+      obs: 'Acordo mútuo: direito garantido com valor reduzido (art. 484-A, §2º). Culpa recíproca: jurisprudência majoritária não reconhece o direito ao seguro-desemprego. Rescisão indireta: direito integral.',
+      cuidado: 'Prazo para requerer: entre o 7º e o 120º dia após a rescisão. Perda do prazo = perda do direito.'
+    }
+  },
+  {
+    id: 'multaatr',
+    nome: 'Multa por atraso no pagamento',
+    sub: 'Art. 477, §8º CLT',
+    sgc: 'sim', cjc: 'sim', pd: 'sim', am: 'sim', ri: 'sim', cr: 'sim',
+    detalhe: {
+      base: '1 salário do empregado (valor bruto)',
+      fundamento: 'Art. 477, §8º CLT',
+      obs: 'Devida quando as verbas rescisórias não são pagas no prazo legal: até o 1º dia útil após o término do contrato (aviso prévio trabalhado) ou até 10 dias corridos (demais casos).',
+      cuidado: 'Muito frequente na prática — empregadores negligenciam o prazo. Verificar sempre a data de pagamento no TRCT.'
+    }
+  }
+];
+
+const cols = ['sgc','cjc','pd','am','ri','cr'];
+
+function pillHTML(val) {
+  if (val === 'sim') return '<span class="pill pill-sim">Sim</span>';
+  if (val === 'nao') return '<span class="pill pill-nao">Não</span>';
+  if (val === 'parcial') return '<span class="pill pill-parcial">Parcial</span>';
+  return '<span class="pill pill-depende">Depende</span>';
+}
+
+function buildTable(filter) {
+  const tbody = document.getElementById('tbody');
+  tbody.innerHTML = '';
+  verbas.forEach((v, i) => {
+    const show = filter === 'all' || v[filter] !== undefined;
+    const highlight = filter !== 'all';
+
+    // Linha principal
+    const tr = document.createElement('tr');
+    tr.className = 'verba-row';
+    tr.dataset.id = v.id;
+
+    let tdNome = `<td><div>${v.nome}</div><div class="verba-sub">${v.sub}</div></td>`;
+    let cells = cols.map(c => {
+      const isHighlight = highlight && c === filter;
+      return `<td style="${isHighlight ? 'background:rgba(201,168,76,0.06)' : ''}">${pillHTML(v[c])}</td>`;
+    }).join('');
+
+    tr.innerHTML = tdNome + cells;
+    tr.addEventListener('click', () => toggleDetail(v.id));
+    tbody.appendChild(tr);
+
+    // Linha de detalhe
+    const td2 = document.createElement('tr');
+    td2.className = 'detail-row';
+    td2.id = 'detail-' + v.id;
+    td2.innerHTML = `<td class="detail-cell" colspan="6">
+      <div class="detail-grid">
+        <div class="detail-card">
+          <div class="detail-card-label">Base de cálculo</div>
+          <div class="detail-card-text">${v.detalhe.base}</div>
+        </div>
+        <div class="detail-card">
+          <div class="detail-card-label">Fundamento legal</div>
+          <div class="detail-card-text">${v.detalhe.fundamento}</div>
+        </div>
+        <div class="detail-card">
+          <div class="detail-card-label">Observação</div>
+          <div class="detail-card-text">${v.detalhe.obs}</div>
+        </div>
+        <div class="detail-card">
+          <div class="detail-card-label">Ponto de atenção</div>
+          <div class="detail-card-text">${v.detalhe.cuidado}</div>
+        </div>
+      </div>
+    </td>`;
+    tbody.appendChild(td2);
+  });
+}
+
+function toggleDetail(id) {
+  const row = document.getElementById('detail-' + id);
+  row.classList.toggle('open');
+}
+
+document.querySelectorAll('.filter-tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    buildTable(btn.dataset.filter);
+  });
+});
+
+buildTable('all');
+</script>
+</body>
+</html>
